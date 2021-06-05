@@ -1,0 +1,10 @@
+{
+    "azimuth_mask": {
+        "min": -90.0,
+        "max": 90.0
+    },
+    "tag_whitelist": [
+        "ble-pd-aaaaaaaaaaaa",
+        "ble-pd-bbbbbbbbbbbb"
+    ]
+}
