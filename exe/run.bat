@@ -1,0 +1,1 @@
+aoa_locator -u COM3 -b115200
