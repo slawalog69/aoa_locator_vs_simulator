@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD
 	<name>aoa_locator</name>
+=======
+	<name>Tst_Locator</name>
+>>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+<<<<<<< HEAD
 			<triggers>clean,full,incremental,</triggers>
+=======
+>>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -20,7 +27,10 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
+<<<<<<< HEAD
 		<nature>org.eclipse.cdt.core.ccnature</nature>
+=======
+>>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>

@@ -4,3 +4,17 @@ doxygen/doxygen_use_javadoc_tags=true
 doxygen/doxygen_use_pre_tag=false
 doxygen/doxygen_use_structural_commands=false
 eclipse.preferences.version=1
+<<<<<<< HEAD
+=======
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/COMMON_HOST_DIR/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/COMMON_HOST_DIR/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/COMMON_HOST_DIR/value=${SDK_DIR}/app/bluetooth/common_host
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/RTL_DIR/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/RTL_DIR/operation=append
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/RTL_DIR/value=${SDK_DIR}/util/silicon_labs/aox
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/SDK_DIR/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/SDK_DIR/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/SDK_DIR/value=../../../../../
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.1447446279/appendContributed=true
+>>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
