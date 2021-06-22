@@ -44,10 +44,12 @@
 #define ARRAY_TYPE_4x4_URA             0
 #define ARRAY_TYPE_3x3_URA             1
 #define ARRAY_TYPE_1x4_ULA             2
-#define ARRAY_TYPE                     ARRAY_TYPE_4x4_URA
+#define ARRAY_TYPE                     ARRAY_TYPE_1x4_ULA
+
+
 
 // AoA estimator mode
-#define AOX_MODE                       SL_RTL_AOX_MODE_REAL_TIME_BASIC
+#define AOX_MODE                       SL_RTL_AOX_MODE_REAL_TIME_BASIC   //SL_RTL_AOX_MODE_REAL_TIME_FAST_RESPONSESL_RTL_AOX_MODE_REAL_TIME_HIGH_ACCURACY
 
 // Reference RSSI value of the asset tag at 1.0 m distance in dBm.
 #define TAG_TX_POWER                   (-45.0)
@@ -85,18 +87,30 @@
 #define AOA_NUM_ARRAY_ELEMENTS  (4 * 4)
 #define AOA_REF_PERIOD_SAMPLES  (7)
 #define SWITCHING_PATTERN       { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }
+//#elif (ARRAY_TYPE == ARRAY_TYPE_3x3_URA)
+//#define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_3x3_URA
+//#define AOA_NUM_SNAPSHOTS       (4)
+//#define AOA_NUM_ARRAY_ELEMENTS  (3 * 3)
+//#define AOA_REF_PERIOD_SAMPLES  (7)
+//#define SWITCHING_PATTERN       { 1, 2, 3, 5, 6, 7, 9, 10, 11 }
 #elif (ARRAY_TYPE == ARRAY_TYPE_3x3_URA)
 #define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_3x3_URA
 #define AOA_NUM_SNAPSHOTS       (4)
 #define AOA_NUM_ARRAY_ELEMENTS  (3 * 3)
 #define AOA_REF_PERIOD_SAMPLES  (7)
-#define SWITCHING_PATTERN       { 1, 2, 3, 5, 6, 7, 9, 10, 11 }
+#define SWITCHING_PATTERN       { 1, 2, 4, 1, 2, 4, 1, 2, 4 }
 #elif (ARRAY_TYPE == ARRAY_TYPE_1x4_ULA)
 #define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_1x4_ULA
 #define AOA_NUM_SNAPSHOTS       (18)
 #define AOA_NUM_ARRAY_ELEMENTS  (1 * 4)
 #define AOA_REF_PERIOD_SAMPLES  (7)
-#define SWITCHING_PATTERN       { 0, 1, 2, 3 }
+#define SWITCHING_PATTERN       { 0,1,2,3}
+//#elif (ARRAY_TYPE == ARRAY_TYPE_1x4_ULA)
+//#define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_1x4_ULA
+//#define AOA_NUM_SNAPSHOTS       (18)
+//#define AOA_NUM_ARRAY_ELEMENTS  (1 * 3)
+//#define AOA_REF_PERIOD_SAMPLES  (7)
+//#define SWITCHING_PATTERN       { 1, 2, 4 }
 #endif
 
 #endif // APP_CONFIG_H

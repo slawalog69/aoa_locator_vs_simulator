@@ -59,6 +59,16 @@ extern "C" {
 /***************************************************************************************************
  * Type Definitions
  **************************************************************************************************/
+#ifndef rad2Dg
+#define rad2Dg		57.295779513f  // 180 /pi
+#endif
+#ifndef fullRad
+#define fullRad (6.2831853071795864769)  // 2x Pi
+#endif
+#ifndef t_pi
+#define t_pi 3.14159265358979323846
+#endif
+
 
 typedef struct aoa_libitems {
   sl_rtl_aox_libitem libitem;

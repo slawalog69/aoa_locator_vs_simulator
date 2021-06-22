@@ -118,6 +118,7 @@ void app_bt_on_event(sl_bt_msg_t *evt)
             add_connection(sync_handle,
                            &evt->data.evt_scanner_scan_report.address,
                            evt->data.evt_scanner_scan_report.address_type);
+            app_log("add_connection 3 \r\n");
           }
         }
       }

@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-<<<<<<< HEAD
 	<name>aoa_locator</name>
-=======
-	<name>Tst_Locator</name>
->>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
-<<<<<<< HEAD
 			<triggers>clean,full,incremental,</triggers>
-=======
->>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -27,11 +20,70 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.cdt.core.cnature</nature>
-<<<<<<< HEAD
 		<nature>org.eclipse.cdt.core.ccnature</nature>
-=======
->>>>>>> 83c8e80577b7a6f07a2d6bcafa1d75835dbea770
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>EXtFiles/aoa_config.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/aoa_config/default/aoa_config.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/aoa_parse.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/aoa_util/aoa_parse.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/aoa_serdes.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/aoa_util/aoa_serdes.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/aoa_util.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/aoa_util/aoa_util.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/app_signal_win.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/app_signal/app_signal_win.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/cJSON.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/util/third_party/cjson/cJSON.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/mqtt.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/mqtt/mqtt.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/sl_bt_ncp_host.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/protocol/bluetooth/src/sl_bt_ncp_host.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/sl_bt_ncp_host_api.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/protocol/bluetooth/src/sl_bt_ncp_host_api.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/system.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/system/system.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/tcp_win.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/tcp/tcp_win.c</locationURI>
+		</link>
+		<link>
+			<name>EXtFiles/uart_win.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/common_host/uart/uart_win.c</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

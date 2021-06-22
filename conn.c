@@ -78,6 +78,7 @@ conn_properties_t* add_connection(uint16_t connection, bd_addr *address, uint8_t
     // Entry is now valid
     ret = &conn_properties[active_connections_num];
     active_connections_num++;
+
   }
   return ret;
 }

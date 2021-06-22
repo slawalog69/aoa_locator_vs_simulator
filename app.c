@@ -48,6 +48,7 @@
 #include "aoa_config.h"
 #include "aoa_parse.h"
 #include "aoa_util.h"
+#include "log2CSV.h"
 
 #define USAGE "\nUsage: %s -t <wstk_address> | -u <serial_port> [-b <baud_rate>] [-f <flow control: 1(on, default) or 0(off)>] [-m <mqtt_address>[:<port>]] [-c <config>] [-v <verbose_level>]\n"
 #define DEFAULT_UART_PORT             NULL
@@ -56,6 +57,9 @@
 #define DEFAULT_UART_TIMEOUT          100
 #define DEFAULT_TCP_PORT              "4901"
 #define MAX_OPT_LEN                   255
+
+
+
 
 SL_BT_API_DEFINE();
 
@@ -93,7 +97,7 @@ void app_init(int argc, char *argv[])
   aoa_whitelist_init();
 
   //Parse command line arguments
-  while ((opt = getopt(argc, argv, "t:u:b:m:f:i:c:v:h")) != -1) {
+  while ((opt = getopt(argc, argv, "t:u:b:m:f:i:c:v:h:l")) != -1) {
     switch (opt) {
       case 'c':
         parse_config(optarg);
@@ -125,6 +129,10 @@ void app_init(int argc, char *argv[])
         break;
       case 'v':
         verbose_level = atol(optarg);
+        break;
+      case 'l':
+    	  cnt_to_csv = atol(optarg);
+
         break;
       case 'h': //Help!
         app_log(USAGE, argv[0]);
@@ -297,6 +305,8 @@ uint8_t find_service_in_advertisement(uint8_t *advdata, uint8_t advlen, uint8_t 
   return ret;
 }
 
+FILE *fCsv = NULL;
+FILE *fSampl = NULL;
 void app_deinit(void)
 {
   app_log("Shutting down.\n");
@@ -308,9 +318,14 @@ void app_deinit(void)
   }
   if (mqtt_host != NULL) {
     free(mqtt_host);
+
+	if (fCsv != NULL)
+		fclose(fCsv);
   }
 }
 
+extern sl_rtl_clib_iq_sample_qa_dataset_t qa_dataset;
+extern   sl_rtl_clib_iq_sample_qa_antenna_data_t qa_antenna;
 void app_on_iq_report(conn_properties_t *tag, aoa_iq_report_t *iq_report)
 {
   aoa_angle_t angle;
@@ -319,10 +334,27 @@ void app_on_iq_report(conn_properties_t *tag, aoa_iq_report_t *iq_report)
   char *payload;
   const char topic_template[] = AOA_TOPIC_ANGLE_PRINT;
   char topic[sizeof(topic_template) + sizeof(aoa_id_t) + sizeof(aoa_id_t)];
+  sl_status_t st =aoa_calculate(&tag->aoa_states, iq_report, &angle);
+//  if (aoa_calculate(&tag->aoa_states, iq_report, &angle) != SL_STATUS_OK)
+  {
 
-  if (aoa_calculate(&tag->aoa_states, iq_report, &angle) != SL_STATUS_OK) {
-    return;
+//	   enum sl_rtl_error_code e= sl_rtl_aox_iq_sample_qa_get_details(&tag->aoa_states.libitem,&qa_dataset,&qa_antenna);
+//	   app_assert(e == SL_RTL_ERROR_SUCCESS, "Failed to get details - %i\n",e);
+//
+//	   app_log("detail qa_dataset:\n\tref_freq  %0.1f\n\tref_sndr  %0.1f\n\tswitching_jitter  %0.1f\n\n",
+//			   qa_dataset.ref_freq,
+//			   qa_dataset.ref_sndr,
+//			   qa_dataset.switching_jitter);
+//	   app_log("detail qa_antenna:\n\tlevel  %0.1f\n\tsnr  %0.1f\n\tphase_value  %0.1f\n\tphase_jitter  %0.1f\n\n",
+//			   qa_antenna.level,qa_antenna.snr,qa_antenna.phase_value,qa_antenna.phase_jitter);
+
+
+
   }
+
+  app_log("===========================\n\n");
+  if(st!= SL_STATUS_OK)  return;
+
 
   // Compile topic
   aoa_address_to_id(tag->address.addr, tag->address_type, tag_id);

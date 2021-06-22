@@ -112,6 +112,8 @@ endif
 ####################################################################
 
 INCLUDEPATHS += . \
+./LogToCSV \
+./Simulator_I_Q \
 $(SDK_DIR)/app/bluetooth/common_host/uart \
 $(SDK_DIR)/app/bluetooth/common_host/tcp \
 $(SDK_DIR)/app/bluetooth/common_host/system \
@@ -213,7 +215,9 @@ $(SDK_DIR)/app/bluetooth/common_host/mqtt/mqtt.c \
 app.c \
 aoa.c \
 conn.c \
-main.c
+main.c \
+LogToCSV/log2CSV.c \
+Simulator_I_Q/Simulator_I_Q.c
 
 ifeq (${APP_MODE},conn_less)
 C_SRC += app_conn_less.c

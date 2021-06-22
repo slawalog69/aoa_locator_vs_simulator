@@ -46,9 +46,13 @@
 #include "aoa_util.h"
 #include "app_config.h"
 #include "aoa.h"
+#include "log2CSV.h"
+#include "Simulator_I_Q.h"
 
 // Antenna switching pattern
 static const uint8_t antenna_array[AOA_NUM_ARRAY_ELEMENTS] = SWITCHING_PATTERN;
+extern void get_qa_detal(sl_rtl_clib_iq_sample_qa_dataset_t** s,
+		sl_rtl_clib_iq_sample_qa_antenna_data_t **a);
 
 /**************************************************************************//**
  * Connection specific Bluetooth event handler.
@@ -97,7 +101,7 @@ void app_bt_on_event(sl_bt_msg_t *evt)
                  "[E: 0x%04x] Failed to start scanner\n",
                  (int)sc);
 
-      app_log("Start scanning...\n");
+      app_log("sl_Start scanning...\n");
 
       // Start Silabs CTE
       sc = sl_bt_cte_receiver_enable_silabs_cte(CTE_SLOT_DURATION,
@@ -112,47 +116,92 @@ void app_bt_on_event(sl_bt_msg_t *evt)
 
     case sl_bt_evt_cte_receiver_silabs_iq_report_id:
     {
-      conn_properties_t *tag;
-      aoa_iq_report_t iq_report;
+		conn_properties_t *tag;
+		aoa_iq_report_t iq_report;
+		static s8* pSimul_IQ_DATA;
 
-      if (evt->data.evt_cte_receiver_silabs_iq_report.samples.len == 0) {
-        // Nothing to be processed.
-        break;
-      }
+		if (evt->data.evt_cte_receiver_silabs_iq_report.samples.len == 0) {
+			// Nothing to be processed.
+			break;
+		}
 
-      // Check if the tag is whitelisted.
-      if (SL_STATUS_NOT_FOUND == aoa_whitelist_find(evt->data.evt_cte_receiver_silabs_iq_report.address.addr)) {
-        if (verbose_level > 0 ) {
-          app_log("Tag is not on the whitelist, ignoring.\n");
-        }
-        break;
-      }
+		// Check if the tag is whitelisted.
+		if (SL_STATUS_NOT_FOUND
+				== aoa_whitelist_find(
+						evt->data.evt_cte_receiver_silabs_iq_report.address.addr)) {
+			if (verbose_level > 0) {
+				app_log("Tag is not on the whitelist, ignoring.\n");
+			}
+			break;
+		}
 
-      // Look for this tag.
-      tag = get_connection_by_address(&evt->data.evt_cte_receiver_silabs_iq_report.address);
-      // Check if it is a new tag
-      if (tag == NULL) {
-        // Connection handle parameter unused.
-        tag = add_connection(0,
-                             &evt->data.evt_cte_receiver_silabs_iq_report.address,
-                             evt->data.evt_cte_receiver_silabs_iq_report.address_type);
-        // Check if we have enough space for hte new tag.
-        if (tag == NULL) {
-          app_log("Too many tags in the system.\n");
-          // Don't continue the process. This will save us CPU time.
-          break;
-        }
-      }
+		// Look for this tag.
+		tag = get_connection_by_address(
+				&evt->data.evt_cte_receiver_silabs_iq_report.address);
+		// Check if it is a new tag
+		if (tag == NULL) {
+			// Connection handle parameter unused.
+			tag = add_connection(0,
+					&evt->data.evt_cte_receiver_silabs_iq_report.address,
+					evt->data.evt_cte_receiver_silabs_iq_report.address_type);
+			app_log("add_connection tag adr \r\n ");
 
-      // Convert event to common IQ report format.
-      iq_report.channel = evt->data.evt_cte_receiver_silabs_iq_report.channel;
-      iq_report.rssi = evt->data.evt_cte_receiver_silabs_iq_report.rssi;
-      iq_report.event_counter = evt->data.evt_cte_receiver_silabs_iq_report.packet_counter;
-      iq_report.length = evt->data.evt_cte_receiver_silabs_iq_report.samples.len;
-      iq_report.samples = (int8_t *)evt->data.evt_cte_receiver_silabs_iq_report.samples.data;
+			// Check if we have enough space for hte new tag.
+			if (tag == NULL) {
+				app_log("Too many tags in the system.\n");
+				// Don't continue the process. This will save us CPU time.
+				break;
+			}
 
-      app_on_iq_report(tag, &iq_report);
-    }
+
+
+	pSimul_IQ_DATA = make_I_Q(iq_report.length, 0);
+//
+		}
+/*		else {
+    	  sl_bt_evt_cte_receiver_silabs_iq_report_t * pReport_t =  &evt->data.evt_cte_receiver_silabs_iq_report;
+    	  app_log("\
+			status %i\n\
+			channel: %i\n\
+			rssi %i\n\
+			packet_counter %i\n\
+			slot_durations %i\n\
+			len %i\n",
+			(int)pReport_t->status,
+			(int)pReport_t->channel,
+			(int)pReport_t->rssi,
+			(int)pReport_t->packet_counter,
+			(int)pReport_t->slot_durations,
+			(int)pReport_t->samples.len);
+		}
+*/
+		// Convert event to common IQ report format.
+		static u8 CountDivided = 20;
+		if(CountDivided)CountDivided--;
+		else {
+			CountDivided = 3;
+			iq_report.channel =
+					evt->data.evt_cte_receiver_silabs_iq_report.channel;
+			iq_report.rssi = evt->data.evt_cte_receiver_silabs_iq_report.rssi;
+			iq_report.event_counter =
+					evt->data.evt_cte_receiver_silabs_iq_report.packet_counter;
+			iq_report.length =
+					evt->data.evt_cte_receiver_silabs_iq_report.samples.len;
+
+//		iq_report.samples =
+//				(int8_t*) evt->data.evt_cte_receiver_silabs_iq_report.samples.data;
+
+
+	iq_report.channel = 37;
+	iq_report.rssi = -50;
+	iq_report.samples = pSimul_IQ_DATA;
+
+
+			app_on_iq_report(tag, &iq_report);
+			I_Q_to_CSV(&iq_report, iq_report.length, tag);
+		}
+
+	}
     break;
 
     // -------------------------------
@@ -161,3 +210,5 @@ void app_bt_on_event(sl_bt_msg_t *evt)
       break;
   }
 }
+//sl_rtl_clib_iq_sample_qa_dataset_t qa_dataset;
+//  sl_rtl_clib_iq_sample_qa_antenna_data_t qa_antenna;

@@ -42,6 +42,7 @@
 #include "app_assert.h"
 
 #include "conn.h"
+#include "Simulator_I_Q.h"
 
 #include "aoa.h"
 #include "app.h"
@@ -113,7 +114,7 @@ void app_bt_on_event(sl_bt_msg_t *evt)
                  "[E: 0x%04x] Failed to start scanner\n",
                  (int)sc);
 
-      app_log("Start scanning...\n");
+      app_log("appconn_Start scanning...\n");
 
       break;
 
@@ -150,9 +151,11 @@ void app_bt_on_event(sl_bt_msg_t *evt)
     }
     case sl_bt_evt_connection_opened_id:
       // Add connection to the connection_properties array
-      add_connection((uint16_t)evt->data.evt_connection_opened.connection,
+    	add_connection((uint16_t)evt->data.evt_connection_opened.connection,
                      &evt->data.evt_connection_opened.address,
                      evt->data.evt_connection_opened.address_type);
+
+      app_log("add_connection 1 \r\n");
       // Discover CTE service on the slave device
       sc = sl_bt_gatt_discover_primary_services_by_uuid(evt->data.evt_connection_opened.connection,
                                                         SERVICE_UUID_LEN,
@@ -293,11 +296,19 @@ void app_bt_on_event(sl_bt_msg_t *evt)
       }
 
       // Convert event to common IQ report format.
-      iq_report.channel = evt->data.evt_cte_receiver_connection_iq_report.channel;
-      iq_report.rssi = evt->data.evt_cte_receiver_connection_iq_report.rssi;
       iq_report.event_counter = evt->data.evt_cte_receiver_connection_iq_report.event_counter;
       iq_report.length = evt->data.evt_cte_receiver_connection_iq_report.samples.len;
+
+      iq_report.channel = evt->data.evt_cte_receiver_connection_iq_report.channel;
+      iq_report.rssi = evt->data.evt_cte_receiver_connection_iq_report.rssi;
       iq_report.samples = (int8_t *)evt->data.evt_cte_receiver_connection_iq_report.samples.data;
+
+iq_report.channel = 37;
+iq_report.rssi = -50;
+s8 *pSimul_IQ_DATA = make_I_Q(iq_report.length, 1);
+iq_report.samples = pSimul_IQ_DATA;
+
+
 
       app_on_iq_report(conn, &iq_report);
     }
