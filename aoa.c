@@ -297,10 +297,11 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 {
 
 	if (fSampl  == NULL) {
-		 if(onLog){
-			 fSampl = fopen("Sample.csv", "wb");
-
-		fprintf(fSampl , "\r\n===CURRENT SETTINGS=======\r\n \
+		if (onLog) {
+			fSampl = fopen("Sample.csv", "wb");
+			fprintf(fSampl, ";;;****** CREATE SAMPLES IN  get_samples()(aoa.c file)*****\r\n");
+			fprintf(fSampl,
+					"\r\n===CURRENT SETTINGS=======\r\n \
 				AOX_ARRAY_TYPE;;;%s\r\n \
 				NUM_ARRAY_ELEMENTS;;;%i\r\n \
 				rtl_aox_mode;;;%s\r\n \
@@ -309,20 +310,18 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 				SAMPLING_RATE SNAPSHOTS;;;%0.1f;us\r\n \
 				CTE_FREQ;;;%0.1f;kHz\r\n",
 
-				ARR_TYP_STRNG[AOX_ARRAY_TYPE],
-				AOA_NUM_ARRAY_ELEMENTS,
-				Strng_Mode[AOX_MODE-3],
-				AOA_NUM_SNAPSHOTS,
-				REFERENCE_SAMPL_RATE,
-				SAMPLING_RATE,
-				CTE_FREQ);
-		 }
+					ARR_TYP_STRNG[AOX_ARRAY_TYPE],
+					AOA_NUM_ARRAY_ELEMENTS, Strng_Mode[AOX_MODE - 3],
+					AOA_NUM_SNAPSHOTS, REFERENCE_SAMPL_RATE, SAMPLING_RATE,
+					CTE_FREQ);
+		}
 	}
 
 
-	if(onLog)
-	fprintf(fSampl , "\r\nChannel frq;;;%0.1f;MHz\r\n;;;ref samples;\r\nI;Q\r\n",fr/1000000.0f);
-
+	if(onLog){
+	fprintf(fSampl , "=================================================\r\n");
+	fprintf(fSampl , "\r\nChannel frq;;;%0.1f;MHz\r\n;;;reference samples;\r\nI;Q\r\n",fr/1000000.0f);
+	}
   uint32_t index = 0;
   // Write reference IQ samples into the IQ sample buffer (sampled on one antenna)
   for (uint32_t sample = 0; sample < AOA_REF_PERIOD_SAMPLES; ++sample) {
@@ -377,8 +376,10 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 }
 
 //*****************************
-
-
+/*
+ * modulation float value on 2xPi (360°) base
+ *
+ */
 
 float restrictRad(float in){
 

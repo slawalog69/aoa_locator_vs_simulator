@@ -13,21 +13,21 @@
 #include "time.h"
 #include <stdlib.h>     /* srand, rand */
 
-
-
-
 #define DUMP 512
 
+//=========Settings for simulator =========
 float SAMPLING_RATE = 2.0;  //us
 float CTE_FREQ = 250.0;		//kHz
-extern float REFERENCE_SAMPL_RATE;
+extern float REFERENCE_SAMPL_RATE; // 1us
+float StartAngle = 90;	//degree,   first I Q data
+ //==========================
 
 
-float StartAngle = 90;	//degree
-//float shift;
 float tShftsample; // koeff freq vs 2us
-float OneSwitchRotate;
-s8 Simul_IQ_DATA[DUMP];
+float OneSwitchRotate;// Rotate per each switch path
+s8 Simul_IQ_DATA[DUMP]; // array simulation I Q data
+
+
 #define toRad(x) x/rad2Dg
 
 /*
@@ -36,7 +36,6 @@ s8 Simul_IQ_DATA[DUMP];
  * as p 3.1 in  AN1297
  * in radians only
  */
-
 float Reference_sampling(float angl_from){
 
 	float tShftRef = (REFERENCE_SAMPL_RATE*CTE_FREQ/1000); // reference is 1us
@@ -45,22 +44,26 @@ float Reference_sampling(float angl_from){
 	return DestAngle;
 }
 /*
- * Calculate angle per one switch antenna in snapshot
- *
+ * Calculate angle rotate per one switch antenna in snapshot
  */
 void calcOneSwitchRotate(){
 
 	tShftsample = (SAMPLING_RATE * CTE_FREQ / 1000);
-	OneSwitchRotate = fullRad * tShftsample;// Rotate per one snapshot
+	OneSwitchRotate = fullRad * tShftsample;// Rotate per each switch path
 }
-
+/*
+ * Jump to angle next switch sample vs AOA_shift
+ */
 static float findAnglShiftperSample(float angl_from, float AOA_shift) {
 
 	float DestAngle = restrictRad(angl_from + OneSwitchRotate + AOA_shift);
 
 	return DestAngle;
 }
-
+/*
+ * Create noise - random value
+ *  diap min 0.0 ... to max 1.00
+ */
 static inline float GetNoise(float min, float max)
 {
 	int f1 = (max-min) *1000.0;
@@ -69,12 +72,16 @@ static inline float GetNoise(float min, float max)
 	/*
 	 * uncomment next if need
 	 */
-
 //	return ((rand() % f1 + f2)/1000.0);
-	return 1.0f;
+
+
+	return 1.0f;  // noise is out
 }
-
-
+/*
+ * Create array simulation of I & Q data
+ * vs given length  and AOA shift (in degree)
+ *
+ */
 s8* make_I_Q(u8 len, float AOA_shift) {
 
 //	app_log("make_I_Q.. len: %i \n",len );
@@ -85,8 +92,8 @@ float rndNoise;
 	s8 *psimData = Simul_IQ_DATA;
 	s8 * end = psimData+len;
 
-
-	StartAngle = 30;//(rand() % 360);
+//change next if need
+//	StartAngle = (rand() % 360);
 	float currAnglRad = toRad(StartAngle);
 
 	float firstAnglRad =currAnglRad;

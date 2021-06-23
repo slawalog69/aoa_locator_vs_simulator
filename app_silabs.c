@@ -30,6 +30,10 @@
  *
  ******************************************************************************/
 
+
+// https://git.jetbrains.space/mydep/aaaa/aoa_locator.git
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -154,28 +158,16 @@ void app_bt_on_event(sl_bt_msg_t *evt)
 			}
 
 
-
+/*
+ * create simulation I & Q data
+ */
 	pSimul_IQ_DATA = make_I_Q(iq_report.length, 0);
-//
+
 		}
-/*		else {
-    	  sl_bt_evt_cte_receiver_silabs_iq_report_t * pReport_t =  &evt->data.evt_cte_receiver_silabs_iq_report;
-    	  app_log("\
-			status %i\n\
-			channel: %i\n\
-			rssi %i\n\
-			packet_counter %i\n\
-			slot_durations %i\n\
-			len %i\n",
-			(int)pReport_t->status,
-			(int)pReport_t->channel,
-			(int)pReport_t->rssi,
-			(int)pReport_t->packet_counter,
-			(int)pReport_t->slot_durations,
-			(int)pReport_t->samples.len);
-		}
-*/
+
 		// Convert event to common IQ report format.
+
+		//Divided incoming evt to every CountDivided
 		static u8 CountDivided = 20;
 		if(CountDivided)CountDivided--;
 		else {
@@ -191,13 +183,16 @@ void app_bt_on_event(sl_bt_msg_t *evt)
 //		iq_report.samples =
 //				(int8_t*) evt->data.evt_cte_receiver_silabs_iq_report.samples.data;
 
-
-	iq_report.channel = 37;
-	iq_report.rssi = -50;
-	iq_report.samples = pSimul_IQ_DATA;
-
+		/*
+		 * Here changed real data to simulations
+		 */
+			iq_report.channel = 37;
+			iq_report.rssi = -50;
+			iq_report.samples = pSimul_IQ_DATA;
 
 			app_on_iq_report(tag, &iq_report);
+
+			// write I Q data to IQ_Report_data_log.csv file
 			I_Q_to_CSV(&iq_report, iq_report.length, tag);
 		}
 
@@ -210,5 +205,3 @@ void app_bt_on_event(sl_bt_msg_t *evt)
       break;
   }
 }
-//sl_rtl_clib_iq_sample_qa_dataset_t qa_dataset;
-//  sl_rtl_clib_iq_sample_qa_antenna_data_t qa_antenna;

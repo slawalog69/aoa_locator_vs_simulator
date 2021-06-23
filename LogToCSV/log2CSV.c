@@ -40,8 +40,9 @@ void I_Q_to_CSV(aoa_iq_report_t *iq_report, int len, conn_properties_t *tag)
 	int8_t* iq_data = iq_report->samples;
 
 	if (fCsv == NULL) {
-		fCsv = fopen("test.csv", "wb");
-		fprintf(fCsv, "N;");		for (int r = 0; r < AOA_NUM_ARRAY_ELEMENTS; ++r) {
+		fCsv = fopen("IQ_Report_data_log.csv", "wb");
+		fprintf(fCsv, "N;");
+		for (int r = 0; r < AOA_NUM_ARRAY_ELEMENTS; ++r) {
 			fprintf(fCsv, "i%i;q%i;Degree%i;Own Shft%i;Power%i;;"
 					,r,r,r,r,r);
 		}
@@ -97,23 +98,7 @@ void I_Q_to_CSV(aoa_iq_report_t *iq_report, int len, conn_properties_t *tag)
 			float Power = sqrt(_i*_i + _q*_q);
 			fprintf(fCsv, "%.1f;;", Power);
 
-			//**************************
-//			char s[24];
-//			sprintf(s, "%f;", deg );
-//			replace_dot( s);
-//			fprintf(fCsv, s);
-//
-//			float diff = prevDeg - deg;
-//			sprintf(s, "%f;", diff);
-//			replace_dot( s);
-//			fprintf(fCsv, s);
-//			prevDeg = deg;
-//
-//			float Power = sqrt(_i*_i + _q*_q);
-//			sprintf(s, "%f;;;", Power);
-//			replace_dot( s);
-//			fprintf(fCsv, s);
-			//*******************************
+
 			if (iq_data > end)
 				break;
 		}
