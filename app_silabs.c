@@ -158,17 +158,12 @@ void app_bt_on_event(sl_bt_msg_t *evt)
 			}
 
 
-/*
- * create simulation I & Q data
- */
-	pSimul_IQ_DATA = make_I_Q(iq_report.length, 0);
-
 		}
 
 		// Convert event to common IQ report format.
 
 		//Divided incoming evt to every CountDivided
-		static u8 CountDivided = 20;
+		static u8 CountDivided = 10;
 		if(CountDivided)CountDivided--;
 		else {
 			CountDivided = 3;
@@ -180,19 +175,34 @@ void app_bt_on_event(sl_bt_msg_t *evt)
 			iq_report.length =
 					evt->data.evt_cte_receiver_silabs_iq_report.samples.len;
 
-//		iq_report.samples =
-//				(int8_t*) evt->data.evt_cte_receiver_silabs_iq_report.samples.data;
+		iq_report.samples =
+				(int8_t*) evt->data.evt_cte_receiver_silabs_iq_report.samples.data;
 
 		/*
 		 * Here changed real data to simulations
 		 */
+
+
+// create simulation I & Q data
+	pSimul_IQ_DATA = make_I_Q(iq_report.length, 0.0);
+//-----
 			iq_report.channel = 37;
 			iq_report.rssi = -50;
 			iq_report.samples = pSimul_IQ_DATA;
 
-			app_on_iq_report(tag, &iq_report);
 
-			// write I Q data to IQ_Report_data_log.csv file
+//		char *rssi = malloc(160);
+//		sprintf (rssi,"RSSI %i           ",iq_report.rssi);
+//		int max = iq_report.rssi + 90;
+//		char *p = rssi+10;
+//		for (int t = 0; t < max; t++) {*p = '>';p++;};
+//		*p = '\n';p++;*p = 0;
+//		app_log(rssi);
+//		free(rssi);
+
+			app_on_iq_report(tag, &iq_report);
+//
+//			// write I Q data to IQ_Report_data_log.csv file
 			I_Q_to_CSV(&iq_report, iq_report.length, tag);
 		}
 

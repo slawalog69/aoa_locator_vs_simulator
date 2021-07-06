@@ -303,10 +303,10 @@ void app_bt_on_event(sl_bt_msg_t *evt)
       iq_report.rssi = evt->data.evt_cte_receiver_connection_iq_report.rssi;
       iq_report.samples = (int8_t *)evt->data.evt_cte_receiver_connection_iq_report.samples.data;
 
-iq_report.channel = 37;
-iq_report.rssi = -50;
-s8 *pSimul_IQ_DATA = make_I_Q(iq_report.length, 1);
-iq_report.samples = pSimul_IQ_DATA;
+//iq_report.channel = 37;
+//iq_report.rssi = -50;
+//s8 *pSimul_IQ_DATA = make_I_Q(iq_report.length, 1);
+//iq_report.samples = pSimul_IQ_DATA;
 
 
 

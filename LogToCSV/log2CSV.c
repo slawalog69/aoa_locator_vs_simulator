@@ -40,10 +40,10 @@ void I_Q_to_CSV(aoa_iq_report_t *iq_report, int len, conn_properties_t *tag)
 	int8_t* iq_data = iq_report->samples;
 
 	if (fCsv == NULL) {
-		fCsv = fopen("IQ_Report_data_log.csv", "wb");
+		fCsv = fopen("Logs/IQ_Report_data_log.csv", "wb");
 		fprintf(fCsv, "N;");
 		for (int r = 0; r < AOA_NUM_ARRAY_ELEMENTS; ++r) {
-			fprintf(fCsv, "i%i;q%i;Degree%i;Own Shft%i;Power%i;;"
+			fprintf(fCsv, "i%i;q%i;Degree%i;Own Shft%i;Amplitude%i;;"
 					,r,r,r,r,r);
 		}
 		for (int r = 0; r < AOA_NUM_ARRAY_ELEMENTS-1; ++r) {

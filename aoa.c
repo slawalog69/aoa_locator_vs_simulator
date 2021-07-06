@@ -134,47 +134,66 @@ AOX_MODE %s\n",
 
 
 }
+char resStrng[128];
+char* parse_qa_res(u32 q_res){
+	char* p= resStrng;
+
+	for (int i = 0; i < 10; ++i) {
+		if(i==1)continue;
+		if(q_res & (1 << i))
+		  {* p= ' '; p++; * p= i + 0x30; p++;}
+	}
+	* p= 0;
+	return resStrng;
+}
+
 
 sl_status_t aoa_calculate(aoa_libitems_t *aoa_state, aoa_iq_report_t *iq_report, aoa_angle_t *angle)
 {
-  uint32_t quality_result;
-  char *iq_sample_qa_string;
-  sl_status_t ret_val = SL_STATUS_OK;
+	uint32_t quality_result;
+	char *iq_sample_qa_string;
+	sl_status_t ret_val = SL_STATUS_OK;
 
-  // Process new IQ samples and calculate Angle of Arrival (azimuth, elevation)
-  enum sl_rtl_error_code ret = aox_process_samples(aoa_state, iq_report, &angle->azimuth, &angle->elevation, &quality_result);
-  // sl_rtl_aox_process will return SL_RTL_ERROR_ESTIMATION_IN_PROGRESS until it has received enough packets for angle estimation
-  if (ret == SL_RTL_ERROR_SUCCESS) {
-    // Check the IQ sample quality result and present a short string according to it
-    if (quality_result == 0) {
-      iq_sample_qa_string = "Good                                   ";
-    } else if (SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result, SL_RTL_AOX_IQ_SAMPLE_QA_REF_ANT_PHASE_JITTER)
-               || SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result, SL_RTL_AOX_IQ_SAMPLE_QA_ANT_X_PHASE_JITTER)
-			   ) {
-      iq_sample_qa_string = "Caution - phase jitter too large       ";
-    } else if (SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result, SL_RTL_AOX_IQ_SAMPLE_QA_SNDR)) {
-      iq_sample_qa_string = "Caution - reference period SNDR too low";
-    } else {
-      iq_sample_qa_string = "Caution (other)                        ";
-    }
-    // Calculate distance from RSSI, and calculate a rough position estimation
-    sl_rtl_util_rssi2distance(TAG_TX_POWER, iq_report->rssi / 1.0, &angle->distance);
-    sl_rtl_util_filter(&aoa_state->util_libitem, angle->distance, &angle->distance);
+	// Process new IQ samples and calculate Angle of Arrival (azimuth, elevation)
+	enum sl_rtl_error_code ret = aox_process_samples(aoa_state, iq_report,
+			&angle->azimuth, &angle->elevation, &quality_result);
+	// sl_rtl_aox_process will return SL_RTL_ERROR_ESTIMATION_IN_PROGRESS until it has received enough packets for angle estimation
+	if (ret == SL_RTL_ERROR_SUCCESS) {
+		// Check the IQ sample quality result and present a short string according to it
+		if (quality_result == 0) {
+			iq_sample_qa_string = "Good                                   ";
+		} else if (SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result,
+				SL_RTL_AOX_IQ_SAMPLE_QA_REF_ANT_PHASE_JITTER) || SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result, SL_RTL_AOX_IQ_SAMPLE_QA_ANT_X_PHASE_JITTER)
+				) {
+			iq_sample_qa_string = "Caution - phase jitter too large       ";
+		} else if (SL_RTL_AOX_IQ_SAMPLE_QA_IS_SET(quality_result,
+				SL_RTL_AOX_IQ_SAMPLE_QA_SNDR)) {
+			iq_sample_qa_string = "Caution - reference period SNDR too low";
+		} else {
+			iq_sample_qa_string = "Caution (other)                        ";
+		}
+		// Calculate distance from RSSI, and calculate a rough position estimation
+		sl_rtl_util_rssi2distance(TAG_TX_POWER, iq_report->rssi / 1.0,
+				&angle->distance);
+		sl_rtl_util_filter(&aoa_state->util_libitem, angle->distance,
+				&angle->distance);
 
 //    app_log("azimuth: %6.1f  elevation: %6.1f  rssi: %6.0f  ch: %2d  Sequence: %5d    Distance: %6.3f  IQ sample Quality: %s quality_result %i\n",
 //            angle->azimuth, angle->elevation, iq_report->rssi / 1.0, iq_report->channel, iq_report->event_counter, angle->distance, iq_sample_qa_string, quality_result);
-    app_log("azimuth: %6.1f ° rssi: %6.0f  ch: %2d   IQ sample Quality: %s -(%i)\n",
-            angle->azimuth,iq_report->rssi / 1.0, iq_report->channel, iq_sample_qa_string,quality_result);
-    angle->rssi = iq_report->rssi;
-    angle->channel = iq_report->channel;
-    angle->sequence = iq_report->event_counter;
-  } else {
+		app_log(
+				"azimuth: %6.1f ° rssi: %6.0f  ch: %2d   IQ sample Quality: %s (%s )\n",
+				angle->azimuth, iq_report->rssi / 1.0, iq_report->channel,
+				iq_sample_qa_string, parse_qa_res(quality_result));
+		angle->rssi = iq_report->rssi;
+		angle->channel = iq_report->channel;
+		angle->sequence = iq_report->event_counter;
+	} else {
 
-    app_log("Failed to calculate angle. (%d) \n", ret);
-    ret_val = SL_STATUS_FAIL;
-  }
+		app_log("Failed to calculate angle. (%d) \n", ret);
+		ret_val = SL_STATUS_FAIL;
+	}
 
-  return ret_val;
+	return ret_val;
 }
 
 
@@ -223,7 +242,7 @@ float fr = calc_frequency_from_channel(iq_report->channel);
 		  elevation);
 
   // fetch the quality results
-  *qa_result = sl_rtl_aox_iq_sample_qa_get_results(&aoa_state->libitem);
+//  *qa_result = sl_rtl_aox_iq_sample_qa_get_results(&aoa_state->libitem);
 
 //  sl_rtl_aox_iq_sample_qa_get_details(&aoa_state->libitem,&qa_dataset,&qa_antenna);
 //	if (s.data_available) {
@@ -298,8 +317,8 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 
 	if (fSampl  == NULL) {
 		if (onLog) {
-			fSampl = fopen("Sample.csv", "wb");
-			fprintf(fSampl, ";;;****** CREATE SAMPLES IN  get_samples()(aoa.c file)*****\r\n");
+			fSampl = fopen("Logs/Sample.csv", "wb");
+			fprintf(fSampl, ";;;****** CREATE SAMPLES IN  get_samples()(aoa.c : 309 file)*****\r\n");
 			fprintf(fSampl,
 					"\r\n===CURRENT SETTINGS=======\r\n \
 				AOX_ARRAY_TYPE;;;%s\r\n \
@@ -314,12 +333,12 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 					AOA_NUM_ARRAY_ELEMENTS, Strng_Mode[AOX_MODE - 3],
 					AOA_NUM_SNAPSHOTS, REFERENCE_SAMPL_RATE, SAMPLING_RATE,
 					CTE_FREQ);
+			fprintf(fSampl , "=================================================\r\n\r\n");
 		}
 	}
 
 
 	if(onLog){
-	fprintf(fSampl , "=================================================\r\n");
 	fprintf(fSampl , "\r\nChannel frq;;;%0.1f;MHz\r\n;;;reference samples;\r\nI;Q\r\n",fr/1000000.0f);
 	}
   uint32_t index = 0;
@@ -341,7 +360,7 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
 
 
 	if(onLog)
-		fprintf(fSampl , ";;;snapshots\r\n");
+		fprintf(fSampl , ";;;snapshots\r\n\r\n");
 
   index = AOA_REF_PERIOD_SAMPLES * 2;
   // Write antenna IQ samples into the IQ sample buffer (sampled on all antennas)

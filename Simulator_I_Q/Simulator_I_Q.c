@@ -40,7 +40,7 @@ float Reference_sampling(float angl_from){
 
 	float tShftRef = (REFERENCE_SAMPL_RATE*CTE_FREQ/1000); // reference is 1us
 	float OneRefShift = fullRad * tShftRef;
-	float DestAngle = restrictRad(angl_from + OneRefShift);
+	float DestAngle = restrictRad(angl_from - OneRefShift);
 	return DestAngle;
 }
 /*
@@ -56,7 +56,7 @@ void calcOneSwitchRotate(){
  */
 static float findAnglShiftperSample(float angl_from, float AOA_shift) {
 
-	float DestAngle = restrictRad(angl_from + OneSwitchRotate + AOA_shift);
+	float DestAngle = restrictRad(angl_from - OneSwitchRotate - AOA_shift);
 
 	return DestAngle;
 }
@@ -66,16 +66,15 @@ static float findAnglShiftperSample(float angl_from, float AOA_shift) {
  */
 static inline float GetNoise(float min, float max)
 {
-	int f1 = (max-min) *1000.0;
-	int f2 = min*1000.0;
-
 	/*
 	 * uncomment next if need
 	 */
-//	return ((rand() % f1 + f2)/1000.0);
+	int f1 = (max-min) *1000.0;
+	int f2 = min*1000.0;
+	return ((rand() % f1 + f2)/1000.0);
 
 
-	return 1.0f;  // noise is out
+//	return 1.0f;  // noise is out
 }
 /*
  * Create array simulation of I & Q data
@@ -93,7 +92,7 @@ float rndNoise;
 	s8 * end = psimData+len;
 
 //change next if need
-//	StartAngle = (rand() % 360);
+	StartAngle = (rand() % 360);
 	float currAnglRad = toRad(StartAngle);
 
 	float firstAnglRad =currAnglRad;

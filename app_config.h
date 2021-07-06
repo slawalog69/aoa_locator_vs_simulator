@@ -49,13 +49,13 @@
 
 
 // AoA estimator mode
-#define AOX_MODE                       SL_RTL_AOX_MODE_REAL_TIME_BASIC   //SL_RTL_AOX_MODE_REAL_TIME_FAST_RESPONSESL_RTL_AOX_MODE_REAL_TIME_HIGH_ACCURACY
+#define AOX_MODE                       SL_RTL_AOX_MODE_REAL_TIME_FAST_RESPONSE   //SL_RTL_AOX_MODE_REAL_TIME_FAST_RESPONSESL_RTL_AOX_MODE_REAL_TIME_HIGH_ACCURACY
 
 // Reference RSSI value of the asset tag at 1.0 m distance in dBm.
 #define TAG_TX_POWER                   (-45.0)
 
 // Filter weight applied on the estimated distance. Ranges from 0 to 1.
-#define FILTERING_AMOUNT               0.6f
+#define FILTERING_AMOUNT               0.8f
 
 // Default value for the lower bound of the azimuth mask.
 // Can be overridden with runtime configuration. Use NAN to disable.
@@ -68,6 +68,7 @@
 // Measurement interval expressed as the number of connection events.
 #define CTE_SAMPLING_INTERVAL          3
 
+
 // Minimum CTE length requested in 8 us units. Ranges from 16 to 160 us.
 #define CTE_MIN_LENGTH                 20
 
@@ -76,7 +77,7 @@
 #define CTE_COUNT                      0
 
 // Switching and sampling slots in us (1 or 2).
-#define CTE_SLOT_DURATION              1
+#define CTE_SLOT_DURATION             1
 
 // -----------------------------------------------------------------------------
 // Secondary configuration values based on primary values.
@@ -86,7 +87,8 @@
 #define AOA_NUM_SNAPSHOTS       (4)
 #define AOA_NUM_ARRAY_ELEMENTS  (4 * 4)
 #define AOA_REF_PERIOD_SAMPLES  (7)
-#define SWITCHING_PATTERN       { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }
+//#define SWITCHING_PATTERN       { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }
+#define SWITCHING_PATTERN       { 0,0, 1,1, 2,2, 3,3, 4,4, 5,5, 6,6, 7,7}
 //#elif (ARRAY_TYPE == ARRAY_TYPE_3x3_URA)
 //#define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_3x3_URA
 //#define AOA_NUM_SNAPSHOTS       (4)
@@ -104,13 +106,13 @@
 #define AOA_NUM_SNAPSHOTS       (18)
 #define AOA_NUM_ARRAY_ELEMENTS  (1 * 4)
 #define AOA_REF_PERIOD_SAMPLES  (7)
-#define SWITCHING_PATTERN       { 0,1,2,3}
+#define SWITCHING_PATTERN       {0,1,2,3}
 //#elif (ARRAY_TYPE == ARRAY_TYPE_1x4_ULA)
 //#define AOX_ARRAY_TYPE          SL_RTL_AOX_ARRAY_TYPE_1x4_ULA
 //#define AOA_NUM_SNAPSHOTS       (18)
 //#define AOA_NUM_ARRAY_ELEMENTS  (1 * 3)
 //#define AOA_REF_PERIOD_SAMPLES  (7)
-//#define SWITCHING_PATTERN       { 1, 2, 4 }
+//#define SWITCHING_PATTERN       { 2, 4, 8 }
 #endif
 
 #endif // APP_CONFIG_H

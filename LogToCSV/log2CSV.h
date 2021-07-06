@@ -9,8 +9,8 @@
 #define LOG2CSV_H_
 
 
-#define LOG_TO_CSV                   4
-#define DEAD_START_CNT               10
+#define LOG_TO_CSV                   15
+#define DEAD_START_CNT               30
 
 #include "conn.h"
 
