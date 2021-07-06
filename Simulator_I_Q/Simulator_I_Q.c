@@ -69,12 +69,12 @@ static inline float GetNoise(float min, float max)
 	/*
 	 * uncomment next if need
 	 */
-	int f1 = (max-min) *1000.0;
-	int f2 = min*1000.0;
-	return ((rand() % f1 + f2)/1000.0);
+//	int f1 = (max-min) *1000.0;
+//	int f2 = min*1000.0;
+//	return ((rand() % f1 + f2)/1000.0);
 
 
-//	return 1.0f;  // noise is out
+	return 1.0f;  // noise is out
 }
 /*
  * Create array simulation of I & Q data
@@ -100,11 +100,11 @@ float rndNoise;
 		for (int t = 0; t < AOA_REF_PERIOD_SAMPLES; t++) {
 
 
-			rndNoise = GetNoise(0.99,1.0);
+			rndNoise = GetNoise(0.7,1.0);
 			*psimData = cos(currAnglRad) * 127*rndNoise; // i
 			psimData++;
 
-			rndNoise =  GetNoise(0.99,1.0);
+			rndNoise =  GetNoise(0.7,1.0);
 			*psimData = sin(currAnglRad) * 127*rndNoise; // q
 			psimData++;
 			currAnglRad = Reference_sampling(currAnglRad);

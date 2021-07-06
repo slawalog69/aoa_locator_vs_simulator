@@ -344,18 +344,18 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
   uint32_t index = 0;
   // Write reference IQ samples into the IQ sample buffer (sampled on one antenna)
   for (uint32_t sample = 0; sample < AOA_REF_PERIOD_SAMPLES; ++sample) {
-    ref_i_samples[0][sample] = iq_report->samples[index++] / 127.0;
+    ref_i_samples[0][sample] = iq_report->samples[index++];// / 127.0;
     if (index == iq_report->length) {
       break;
     }
-    ref_q_samples[0][sample] = iq_report->samples[index++] / 127.0;
+    ref_q_samples[0][sample] = iq_report->samples[index++];// / 127.0;
     if (index == iq_report->length) {
       break;
     }
 
 	if(onLog)
-		fprintf(fSampl ,"%i;%i\r\n",(s8)(ref_i_samples[0][sample]*127),
-				(s8)(ref_q_samples[0][sample]*127));
+		fprintf(fSampl ,"%i;%i\r\n",(s8)(ref_i_samples[0][sample]),
+				(s8)(ref_q_samples[0][sample]));
   }
 
 
@@ -367,17 +367,17 @@ static void get_samples(aoa_iq_report_t *iq_report,float fr)
   for (uint32_t snapshot = 0; snapshot < AOA_NUM_SNAPSHOTS; ++snapshot) {
 
     for (uint32_t antenna = 0; antenna < AOA_NUM_ARRAY_ELEMENTS; ++antenna) {
-      i_samples[snapshot][antenna] = iq_report->samples[index++] / 127.0;
+      i_samples[snapshot][antenna] = iq_report->samples[index++] ;
       if (index == iq_report->length) {
         break;
       }
-      q_samples[snapshot][antenna] = iq_report->samples[index++] / 127.0;
+      q_samples[snapshot][antenna] = iq_report->samples[index++] ;
       if (index == iq_report->length) {
         break;
       }
 		if(onLog)
-			fprintf(fSampl ,"%i;%i;;;",(s8)(i_samples[snapshot][antenna]*127),
-					(s8)(q_samples[snapshot][antenna]*127));
+			fprintf(fSampl ,"%i;%i;;;",(s8)(i_samples[snapshot][antenna]),
+					(s8)(q_samples[snapshot][antenna]));
     }
     if(onLog)
 			fprintf(fSampl ,"\r\n");
